@@ -25,7 +25,7 @@ def load_data(filepath='data/multishapes.csv'):
         print(f"Error: Could not find {filepath}")
         return None
 
-def run_iteration_kmeans(data, k=100, n_iterations=20):
+def run_iteration_kmeans(data, k=100, n_iterations=100):
     """Run k-means clustering multiple times and store all results."""
     print(f"Running k-means with k={k} for {n_iterations} iterations...")
     
@@ -38,8 +38,8 @@ def run_iteration_kmeans(data, k=100, n_iterations=20):
     for iteration in range(n_iterations):
         print(f"Running iteration {iteration + 1}/{n_iterations}...")
         
-        # Run k-means clustering
-        kmeans = KMeans(n_clusters=k, random_state=iteration, n_init=10)
+        # Run k-means clustering with high variability
+        kmeans = KMeans(n_clusters=k, random_state=None, n_init=1, max_iter=1, init='random')
         cluster_labels = kmeans.fit_predict(features)
         
         # Create dataframe for this iteration
@@ -77,9 +77,9 @@ if __name__ == "__main__":
     if df is None:
         exit(1)
     
-    # Step 2 & 3: Run k-means with k=100 for 20 iterations
+    # Step 2 & 3: Run k-means with k=25 for 50 iterations
     print("\nStep 2-3: Running k-means iterations...")
-    results_df = run_iteration_kmeans(df, k=100, n_iterations=20)
+    results_df = run_iteration_kmeans(df, k=100, n_iterations=100)
     
     # Step 4: Save to CSV
     print("\nStep 4: Saving results to CSV...")

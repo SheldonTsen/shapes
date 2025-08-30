@@ -77,8 +77,9 @@ def plot_community_sizes(df):
     colors = ['red' if idx == -1 else 'skyblue' for idx in community_counts.index]
     bars = plt.bar(community_counts.index, community_counts.values, alpha=0.7, color=colors)
     
-    # Add legend
-    plt.legend([bars[0], bars[1]], ['Isolated Points', 'Communities'], loc='upper right')
+    # Add legend only if we have multiple bar types
+    if len(bars) > 1:
+        plt.legend([bars[0], bars[1]], ['Isolated Points', 'Communities'], loc='upper right')
     
     plt.title(f'Community Size Distribution\n(All communities and isolated points)')
     plt.xlabel('Community ID')

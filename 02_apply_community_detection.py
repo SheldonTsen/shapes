@@ -66,9 +66,9 @@ def analyze_co_clustering(pairs_df):
     print(f"Co-clustering frequency distribution:")
     print(pair_counts['co_cluster_count'].value_counts().sort_index())
     
-    # Find pairs that are frequently co-clustered (10+ times = >50% of iterations)
-    frequent_pairs = pair_counts[pair_counts['co_cluster_count'] >= 10]  # Appear together in 10+ iterations
-    print(f"\nPairs that co-cluster in 10+ iterations (>50% of the time): {len(frequent_pairs)}")
+    # Find pairs that are frequently co-clustered (50+ times = >50% of iterations)
+    frequent_pairs = pair_counts[pair_counts['co_cluster_count'] >= 50]  # Appear together in 50+ iterations
+    print(f"\nPairs that co-cluster in 50+ iterations (>50% of the time): {len(frequent_pairs)}")
     
     # Analyze by shape similarity
     pairs_with_shapes = pairs_df[['unique_id_1', 'unique_id_2', 'shape_1', 'shape_2']].drop_duplicates()
@@ -82,11 +82,11 @@ def analyze_co_clustering(pairs_df):
     
     return pair_counts
 
-def detect_communities(pair_counts, threshold=10):
+def detect_communities(pair_counts, threshold=50):
     """Apply greedy community detection based on co-clustering pairs."""
     print(f"\n=== Community Detection ===")
     
-    # Filter pairs that meet the threshold (10+ co-occurrences = >50% of iterations)
+    # Filter pairs that meet the threshold (50+ co-occurrences = >50% of iterations)
     strong_pairs = pair_counts[pair_counts['co_cluster_count'] >= threshold]
     print(f"Strong pairs (>={threshold} co-occurrences): {len(strong_pairs)}")
     
@@ -103,8 +103,8 @@ def detect_communities(pair_counts, threshold=10):
     
     print(f"Graph created: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
     
-    # Apply greedy community detection (modularity optimization)
-    communities = community.greedy_modularity_communities(G, weight='weight')
+    # Apply connected components - any co-occurrence creates same community
+    communities = list(nx.connected_components(G))
     
     print(f"Communities detected: {len(communities)}")
     
@@ -172,7 +172,7 @@ if __name__ == "__main__":
     
     # Step 4: Detect communities using greedy algorithm
     print("\nStep 4: Detecting communities...")
-    community_assignments = detect_communities(pair_counts, threshold=10)
+    community_assignments = detect_communities(pair_counts, threshold=50)
     
     # Step 5: Assign communities to original data
     if community_assignments is not None:

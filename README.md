@@ -12,7 +12,7 @@ This project performs K-means clustering analysis on the multishapes dataset.
 2. Create and activate a virtual environment:
    ```bash
    uv venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   source .venv/bin/activate
    ```
 
 3. Install dependencies:
