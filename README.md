@@ -2,6 +2,8 @@
 
 This project implements community detection using iterative k-means clustering followed by co-occurrence analysis on the multishapes dataset.
 
+📊 **See [results.md](results.md) for the complete analysis, methodology, and findings.**
+
 ## Setup with uv
 
 1. Install uv if you haven't already:
