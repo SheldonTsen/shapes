@@ -23,15 +23,3 @@ This project implements community detection using iterative k-means clustering f
    ```bash
    uv pip install -r requirements.txt
    ```
-
-## Running the Analysis
-
-```bash
-python kmeans_analysis.py
-```
-
-This will:
-- Load the multishapes.csv dataset
-- Perform K-means clustering
-- Generate visualization plots
-- Display cluster analysis results

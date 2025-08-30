@@ -24,16 +24,16 @@ Individual iteration results:
 
 ### 3. Community Detection via Co-occurrence Analysis (`02_apply_community_detection.py`)
 - **Co-occurrence Threshold**: 50+ iterations (≥50% of all iterations)
-- **Self-join Analysis**: Identified 780,659 co-clustered pairs across all iterations
-- **Strong Pairs**: 5,886 pairs that co-occurred in ≥50 iterations
+- **Self-join Analysis**: Identified 775,135 co-clustered pairs across all iterations
+- **Strong Pairs**: 5,865 pairs that co-occurred in ≥50 iterations
 - **Graph Construction**: Built network from strong pairs using NetworkX
 - **Community Detection**: Applied connected components algorithm
 
 #### Key Findings:
-- **Total unique pairs**: 31,552 pairs co-clustered at least once
-- **Strong pairs**: 5,886 pairs (≥50 co-occurrences)
-- **Shape consistency**: 90.9% of co-clustered pairs have the same shape
-- **Communities detected**: 9 distinct communities
+- **Total unique pairs**: 31,384 pairs co-clustered at least once
+- **Strong pairs**: 5,865 pairs (≥50 co-occurrences)
+- **Shape consistency**: 91.1% of co-clustered pairs have the same shape
+- **Communities detected**: 8 distinct communities
 
 ### 4. Community Visualization (`03_visualize_communities.py`)
 
@@ -41,57 +41,53 @@ Individual iteration results:
 
 ![Community Sizes](plots/community_sizes.png)
 
-## Results Summary
-
-### Community Statistics
-- **Total communities**: 9
-- **Points in communities**: 1,099 (99.9%)
-- **Isolated points**: 1 (0.1%)
-- **Largest community**: 272 points
-- **Smallest community**: 7 points
-- **Mean community size**: 122.1 points
-- **Median community size**: 110.0 points
-
-### Community Distribution
-| Community ID | Size | Percentage |
-|-------------|------|------------|
-| 0 | 272 | 24.7% |
-| 1 | 147 | 13.4% |
-| 2 | 193 | 17.5% |
-| 3 | 174 | 15.8% |
-| 4 | 41 | 3.7% |
-| 5 | 110 | 10.0% |
-| 6 | 102 | 9.3% |
-| 7 | 53 | 4.8% |
-| 8 | 7 | 0.6% |
-| Isolated | 1 | 0.1% |
-
 ## Analysis Insights
 
-### 1. Threshold Impact
-The 50% co-occurrence threshold (updated from 25%) resulted in:
-- More granular community detection (9 vs 2 communities)
-- Higher confidence in community assignments
-- Better separation of distinct data clusters
+### 1. Algorithm Comparison
+Multiple community detection approaches were tested:
 
-### 2. Shape Consistency
-The high percentage (90.9%) of same-shape pairs in co-clustered relationships suggests that:
-- Despite k-means instability across runs, truly similar points (same shapes) consistently find each other
-- The clustering instability filters out weak/random associations while preserving strong relationships
-- Community detection successfully identifies natural groupings that persist despite algorithmic variability
+**Connected Components (Final Choice)**:
+- **Communities**: 8 (35-236 points each)
+- **Coverage**: 99.7% of points assigned
+- **Approach**: Simple, deterministic - any co-clustering relationship creates edges
+- **Result**: Clean, interpretable boundaries close to original 6 shapes
 
-### 3. Community Quality
-- **High coverage**: 99.9% of points assigned to communities
-- **Balanced distribution**: No single community dominates (largest is 24.7%)
-- **Meaningful sizes**: Communities range from focused groups (7 points) to substantial clusters (272 points)
+**Louvain with Various Resolutions**:
+- **High resolution (1.5)**: 32 communities - over-segmented
+- **Low resolution (0.2)**: 17 communities - better but still fragmented
+- **Medium resolution (1.0)**: Variable results, non-deterministic
+
+**Adaptive Thresholds**:
+- **Concept**: Point-specific thresholds based on individual stability patterns
+- **Connected Components**: 2 massive communities (too permissive)
+- **With Louvain**: 16 communities (over-segmented)
+
+### 2. Key Finding: Simplicity Wins
+The straightforward connected components approach with fixed threshold=50 consistently outperformed more sophisticated methods:
+- **Deterministic**: Same results every run
+- **Interpretable**: Clear logic - co-cluster ≥50 times → same community  
+- **Effective**: 8 communities closely match the 6 original shapes
+- **Robust**: Focus on edge creation rather than complex optimization
+
+### 3. Shape Consistency
+The high percentage (91.1%) of same-shape pairs in co-clustered relationships confirms:
+- K-means instability reveals true underlying structure
+- Points from the same shape naturally cluster together across iterations
+- Dense borders between communities indicate meaningful boundaries
+
+### 4. Community Quality
+- **Optimal granularity**: 8 communities vs 6 original shapes provides meaningful subdivision
+- **High coverage**: 99.7% of points assigned to communities
+- **Balanced sizes**: Range from 35-236 points, no single dominant community
+- **Spatial coherence**: Communities maintain natural shape boundaries
 
 ## Conclusion
 
-The iterative k-means approach with co-occurrence analysis successfully identified 9 meaningful communities in the multishapes dataset. The methodology demonstrates robustness by:
+The iterative k-means approach with connected components community detection successfully identified 8 meaningful communities in the multishapes dataset. Key insights:
 
-1. **Stability through instability**: Points that consistently cluster together despite k-means variability form robust communities
-2. **Shape awareness**: Communities align well with the underlying shape categories
-3. **Scalability**: The approach handles the full dataset efficiently
-4. **Interpretability**: Results provide clear community assignments with statistical backing
+1. **Edge creation is paramount**: Getting the right co-clustering relationships matters more than sophisticated community algorithms
+2. **Simplicity over complexity**: Connected components outperformed Louvain and adaptive methods
+3. **Deterministic reliability**: Fixed thresholds provide consistent, interpretable results
+4. **Natural boundary detection**: Dense co-clustering borders reveal true community structure
 
-This approach offers an alternative to traditional community detection methods by exploiting k-means instability across iterations - using the variability of individual clustering runs to identify which relationships are truly stable and meaningful.
+This methodology demonstrates that exploiting k-means instability through simple graph-based approaches can effectively reveal underlying data structure without complex parameter tuning.

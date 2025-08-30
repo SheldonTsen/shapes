@@ -82,8 +82,8 @@ def analyze_co_clustering(pairs_df):
     
     return pair_counts
 
-def detect_communities(pair_counts, threshold=25):
-    """Apply greedy community detection based on co-clustering pairs."""
+def detect_communities(pair_counts, threshold=50):
+    """Apply community detection based on co-clustering pairs."""
     print(f"\n=== Community Detection ===")
     
     # Filter pairs that meet the threshold (50+ co-occurrences = >50% of iterations)
@@ -103,7 +103,8 @@ def detect_communities(pair_counts, threshold=25):
     
     print(f"Graph created: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
     
-    # Apply connected components - any co-occurrence creates same community
+    # Apply connected components - deterministic approach
+    # Any co-clustering relationship creates same community
     communities = list(nx.connected_components(G))
     
     print(f"Communities detected: {len(communities)}")
