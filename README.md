@@ -1,6 +1,6 @@
-# Shapes K-means Clustering
+# K-means Community Detection Analysis
 
-This project performs K-means clustering analysis on the multishapes dataset.
+This project implements community detection using iterative k-means clustering followed by co-occurrence analysis on the multishapes dataset.
 
 ## Setup with uv
 

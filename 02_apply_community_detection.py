@@ -82,7 +82,7 @@ def analyze_co_clustering(pairs_df):
     
     return pair_counts
 
-def detect_communities(pair_counts, threshold=50):
+def detect_communities(pair_counts, threshold=25):
     """Apply greedy community detection based on co-clustering pairs."""
     print(f"\n=== Community Detection ===")
     
